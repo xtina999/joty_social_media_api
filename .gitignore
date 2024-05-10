@@ -3,3 +3,4 @@
 .idea
 .DB_Store
 .env
+db.sqlite3
