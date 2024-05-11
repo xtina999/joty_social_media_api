@@ -24,8 +24,17 @@ class UserListSerializer(UserSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    created_by = serializers.PrimaryKeyRelatedField(read_only=True)
+    created_by = serializers.HyperlinkedIdentityField(
+        view_name="joty:profile-detail",
+        lookup_field="pk"
+    )
 
     class Meta:
         model = Post
-        fields = "__all__"
+        fields = (
+            "title",
+            "text",
+            "date_created",
+            "hashtag",
+            "created_by"
+        )

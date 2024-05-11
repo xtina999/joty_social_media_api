@@ -6,6 +6,7 @@ class AllowAllPermission(BasePermission):
     def has_permission(self, request, view):
         return True
 
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Дозволяє редагувати тільки власника об'єкта.
@@ -18,3 +19,15 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Дозволяє редагувати тільки власнику об'єкта
         return obj.created_by == request.user
+
+
+class CanEditOwnProfile(permissions.BasePermission):
+    """
+    Дозволяє редагувати тільки власний профіль.
+    """
+    def has_object_permission(self, request, view, obj):
+        # Дозволяє всім читати, але тільки власнику редагувати
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj == request.user
