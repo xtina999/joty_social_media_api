@@ -22,5 +22,7 @@ from django.urls.conf import include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/", include("user.urls", namespace="user")),
+    path("joty/", include("social_media_api.urls", namespace="joty")),
+
 ]
 app_name = "user"

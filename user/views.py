@@ -1,10 +1,7 @@
-from typing import Optional
-
 from django.contrib.auth import get_user_model
-from rest_framework import authentication, generics, permissions
+from rest_framework import permissions
 
 from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework_simplejwt.authentication import JWTAuthentication
