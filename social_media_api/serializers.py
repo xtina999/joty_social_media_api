@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from rest_framework import serializers
 
 from social_media_api.models import Post
@@ -24,11 +25,15 @@ class UserListSerializer(UserSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    created_by = serializers.HyperlinkedIdentityField(
+    created_by = serializers.HyperlinkedRelatedField(
         view_name="joty:profile-detail",
-        lookup_field="pk"
+        lookup_field="pk",
+        read_only=True,
+        format="html",
     )
-
+    likes_count = serializers.SerializerMethodField()
+    unlike = serializers.SerializerMethodField()
+    add_like = serializers.SerializerMethodField()
     class Meta:
         model = Post
         fields = (
@@ -36,5 +41,27 @@ class PostSerializer(serializers.ModelSerializer):
             "text",
             "date_created",
             "hashtag",
-            "created_by"
+            "created_by",
+            "likes_count",
+            "add_like",
+            "unlike",
+        )
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+
+    def get_add_like(self, obj):
+        request = self.context.get("request")
+        return request.build_absolute_uri(
+            reverse(
+                "joty:post-add-like", kwargs={"pk": obj.pk}
+            )
+        )
+
+    def get_unlike(self, obj):
+        request = self.context.get("request")
+        return request.build_absolute_uri(
+            reverse(
+                "joty:post-unlike", kwargs={"pk": obj.pk}
+            )
         )
